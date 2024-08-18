@@ -31,15 +31,19 @@ const Property = () => {
   useEffect(() => {
     let updatedProperties = properties;
 
-    // Apply filter based on category
-    if (selectedFilter !== "all") {
+    // Apply filter based on status or location
+    if (selectedFilter === "Sold" || selectedFilter === "Available") {
       updatedProperties = updatedProperties.filter(
-        (property) => property.category === selectedFilter
+        (property) => property.status === selectedFilter
+      );
+    } else if (selectedFilter === "Place") {
+      updatedProperties = updatedProperties.filter(
+        (property) => property.location.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Apply search filter based on title
-    if (searchTerm) {
+    if (searchTerm && selectedFilter !== "Place") {
       updatedProperties = updatedProperties.filter((property) =>
         property.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -65,21 +69,19 @@ const Property = () => {
       {/* Filter Tabs */}
       <div className="mb-6">
         <div className="flex space-x-4 justify-center">
-          {["all", "PG / Co-living", "Commercial", "Plots/Land"].map(
-            (category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedFilter(category)}
-                className={`py-2 px-4 rounded-md text-sm font-medium ${
-                  selectedFilter === category
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-gray-700 border border-gray-300"
-                }`}
-              >
-                {category}
-              </button>
-            )
-          )}
+          {["all", "Sold", "Available", "Place"].map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setSelectedFilter(filter)}
+              className={`py-2 px-4 rounded-md text-sm font-medium ${
+                selectedFilter === filter
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-gray-700 border border-gray-300"
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -88,7 +90,7 @@ const Property = () => {
         <div className="relative">
           <input
             type="text"
-            placeholder="Search properties by title..."
+            placeholder={`Search properties by ${selectedFilter === "Place" ? "location" : "title"}...`}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full p-4 pl-10 border border-gray-300 rounded-md shadow-sm"

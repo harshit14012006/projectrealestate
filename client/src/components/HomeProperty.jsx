@@ -7,7 +7,7 @@ import { faDollarSign, faMapMarkerAlt, faBed, faBath, faCar } from '@fortawesome
 
 const properties = [
   { id: 1, title: 'Modern Apartment', location: 'Sirsa', price: '22,000/month', image: homepropertypic1, beds: 3, baths: 1, parking: '1' },
-  { id: 2, title: 'Cozy Cottage', location: 'Hisaar', price: '11,500/month', image: homepropertypic2, beds: 3, baths: 2, parking: '2' },
+  { id: 2, title: 'Cozy Cottage', location: 'Hisar', price: '11,500/month', image: homepropertypic2, beds: 3, baths: 2, parking: '2' },
   { id: 3, title: 'Spacious House', location: 'Chandigarh', price: '23,000/month', image: homepropertypic3, beds: 4, baths: 3, parking: '3' },
   // Add more properties here
 ];
@@ -82,9 +82,9 @@ const HomeProperty = () => {
                 </summary>
                 <article className="px-4 pb-4">
                   <ul className="flex flex-col gap-4 pl-2 mt-4">
-                    <li onClick={() => handleLocationSelect('New York')} className="cursor-pointer hover:text-indigo-600">New York</li>
-                    <li onClick={() => handleLocationSelect('California')} className="cursor-pointer hover:text-indigo-600">California</li>
-                    <li onClick={() => handleLocationSelect('Texas')} className="cursor-pointer hover:text-indigo-600">Texas</li>
+                    <li onClick={() => handleLocationSelect('Sirsa')} className="cursor-pointer hover:text-indigo-600">Sirsa</li>
+                    <li onClick={() => handleLocationSelect('Hisar')} className="cursor-pointer hover:text-indigo-600">Hisar</li>
+                    <li onClick={() => handleLocationSelect('Chandigarh')} className="cursor-pointer hover:text-indigo-600">Chandigarh</li>
                     <li onClick={() => handleLocationSelect('')} className="cursor-pointer hover:text-indigo-600">All Locations</li>
                   </ul>
                 </article>
