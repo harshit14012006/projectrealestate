@@ -56,7 +56,7 @@ const Properties = () => {
 
   const fetchProperties = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/properties");
+      const response = await axios.get("http://localhost:8080/api/properties/:id");
       setProperties(response.data);
     } catch (error) {
       setError("Failed to fetch properties.");

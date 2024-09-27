@@ -1,27 +1,25 @@
 import express from 'express';
 import multer from 'multer';
-import path from 'path'; 
 import { addProperty, getProperties, getPropertyById, updateProperty, deleteProperty } from '../controllers/propertyController.js';
 
 const router = express.Router();
 
-// Configure multer for image uploading
+// Configure multer for image upload
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: function (req, file, cb) {
         cb(null, 'uploads/');
     },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
     }
 });
-
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 // Routes
-router.post('/properties', upload.single('image'), addProperty);
-router.get('/properties', getProperties);
-router.get('/properties/:id', getPropertyById);
-router.put('/properties/:id', upload.single('image'), updateProperty);
-router.delete('/properties/:id', deleteProperty);
+router.post('/add', upload.single('image'), addProperty);
+router.get('/', getProperties);
+router.get('/:id', getPropertyById);
+router.put('/:id', upload.single('image'), updateProperty);
+router.delete('/:id', deleteProperty);
 
 export default router;

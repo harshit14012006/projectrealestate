@@ -1,5 +1,4 @@
-import Property from '../models/Property.js';
-import path from 'path';
+import Property from '../models/property.js';
 
 // Helper function to remove the 'uploads/' prefix
 const cleanImagePath = (imagePath) => {
@@ -8,25 +7,22 @@ const cleanImagePath = (imagePath) => {
 
 // Add a new property
 export const addProperty = async (req, res) => {
+    const { title, location, price, status } = req.body;
+    const image = cleanImagePath(req.file.path); // Clean the image path
+
+    const newProperty = new Property({
+        title,
+        location,
+        price,
+        status,
+        image,
+    });
+
     try {
-        const { title, location, price, status } = req.body;
-        const image = req.file ? req.file.path : '';
-
-        const newProperty = new Property({
-            title,
-            location,
-            price,
-            status,
-            image
-        });
-
         await newProperty.save();
-        res.status(201).json({
-            ...newProperty.toObject(),
-            image: cleanImagePath(newProperty.image)
-        });
+        res.status(201).json({ message: 'Property added successfully', property: newProperty });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Error adding property', error: error.message });
     }
 };
 
@@ -34,68 +30,64 @@ export const addProperty = async (req, res) => {
 export const getProperties = async (req, res) => {
     try {
         const properties = await Property.find();
-        const cleanedProperties = properties.map(property => ({
-            ...property.toObject(),
-            image: cleanImagePath(property.image)
-        }));
-        res.status(200).json(cleanedProperties);
+        res.status(200).json(properties);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Error fetching properties', error: error.message });
     }
 };
 
-// Get a property by ID
+// Get property by ID
 export const getPropertyById = async (req, res) => {
+    const { id } = req.params;
+
     try {
-        const property = await Property.findById(req.params.id);
-        if (property) {
-            res.status(200).json({
-                ...property.toObject(),
-                image: cleanImagePath(property.image)
-            });
-        } else {
-            res.status(404).json({ message: 'Property not found' });
+        const property = await Property.findById(id);
+        if (!property) {
+            return res.status(404).json({ message: 'Property not found' });
         }
+        res.status(200).json(property);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Error fetching property', error: error.message });
     }
 };
 
 // Update a property
 export const updateProperty = async (req, res) => {
-    try {
-        const { title, location, price, status } = req.body;
-        const image = req.file ? req.file.path : '';
+    const { id } = req.params;
+    const { title, location, price, status } = req.body;
+    let image;
 
+    if (req.file) {
+        image = cleanImagePath(req.file.path); // Clean the image path
+    }
+
+    try {
         const updatedProperty = await Property.findByIdAndUpdate(
-            req.params.id,
+            id,
             { title, location, price, status, image },
-            { new: true } // Return the updated document
+            { new: true }
         );
 
-        if (updatedProperty) {
-            res.status(200).json({
-                ...updatedProperty.toObject(),
-                image: cleanImagePath(updatedProperty.image)
-            });
-        } else {
-            res.status(404).json({ message: 'Property not found' });
+        if (!updatedProperty) {
+            return res.status(404).json({ message: 'Property not found' });
         }
+        res.status(200).json({ message: 'Property updated successfully', property: updatedProperty });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Error updating property', error: error.message });
     }
 };
 
 // Delete a property
 export const deleteProperty = async (req, res) => {
+    const { id } = req.params;
+
     try {
-        const property = await Property.findByIdAndDelete(req.params.id);
-        if (property) {
-            res.status(200).json({ message: 'Property deleted' });
-        } else {
-            res.status(404).json({ message: 'Property not found' });
+        const deletedProperty = await Property.findByIdAndDelete(id);
+        if (!deletedProperty) {
+            return res.status(404).json({ message: 'Property not found' });
         }
+        res.status(200).json({ message: 'Property deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Error deleting property', error: error.message });
     }
 };

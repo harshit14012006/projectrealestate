@@ -108,7 +108,7 @@ const Property = () => {
               className="bg-white p-4 rounded-lg shadow-md"
             >
               <img
-                src={`http://localhost:8080/uploads/${property.image}`}
+                src={`https://mernbackend-sfyd.onrender.com/uploads/${property.image}`}
                 alt={property.title}
                 className="w-full h-40 object-cover rounded-md mb-4"
               />
