@@ -14,7 +14,7 @@ const Property = () => {
     const fetchProperties = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/properties"
+          "https://mernbackend-2-apan.onrender.com/api/properties/"
         );
         setProperties(response.data);
         setFilteredProperties(response.data); // Initially, show all properties
@@ -108,7 +108,7 @@ const Property = () => {
               className="bg-white p-4 rounded-lg shadow-md"
             >
               <img
-                src={`https://mernbackend-sfyd.onrender.com/uploads/${property.image}`}
+                src={`https://mernbackend-2-apan.onrender.com/uploads/${property.image}`}
                 alt={property.title}
                 className="w-full h-40 object-cover rounded-md mb-4"
               />

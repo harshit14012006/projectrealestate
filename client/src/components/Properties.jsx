@@ -31,7 +31,7 @@ const Properties = () => {
       if (editMode && currentProperty) {
         // Update property
         await axios.put(
-          `http://localhost:8080/api/properties/${currentProperty._id}`,
+          `https://mernbackend-2-apan.onrender.com/api/properties/${currentProperty._id}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -40,7 +40,9 @@ const Properties = () => {
         alert("Property updated successfully");
       } else {
         // Add new property
-        await axios.post("http://localhost:8080/api/properties", formData, {
+        await axios.post(
+          "https://mernbackend-2-apan.onrender.com/api/properties/add"
+          , formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Property added successfully");
@@ -54,16 +56,23 @@ const Properties = () => {
     }
   };
 
-  const fetchProperties = async () => {
+  const fetchProperties = async (id = null) => {
+    setLoading(true); // Start loading state
     try {
-      const response = await axios.get("http://localhost:8080/api/properties/:id");
+      // If id is provided, fetch a single property, else fetch all properties
+      const response = id
+        ? await axios.get(`https://mernbackend-2-apan.onrender.com/api/properties/${id}`)
+        : await axios.get("https://mernbackend-2-apan.onrender.com/api/properties");
+  
       setProperties(response.data);
     } catch (error) {
       setError("Failed to fetch properties.");
     } finally {
-      setLoading(false);
+      setLoading(false); // End loading state
     }
   };
+  
+  
 
   const handleEdit = (property) => {
     setTitle(property.title);
@@ -78,7 +87,7 @@ const Properties = () => {
   const handleRemove = async (id) => {
     if (window.confirm("Are you sure you want to delete this property?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/properties/${id}`);
+        await axios.delete(`https://mernbackend-2-apan.onrender.com/api/properties/${id}`);
         alert("Property removed successfully");
         fetchProperties(); // Refresh the property list
       } catch (error) {

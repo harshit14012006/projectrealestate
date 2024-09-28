@@ -23,3 +23,4 @@ router.put('/:id', upload.single('image'), updateProperty);
 router.delete('/:id', deleteProperty);
 
 export default router;
+
